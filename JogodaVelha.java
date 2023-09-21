@@ -8,18 +8,30 @@ public class JogodaVelha {
 		return entrada.matches("\\d+");
 	}
 
-	static boolean opcaoValida(int escolhadoUsuario) {
-		if (escolhadoUsuario > 0 && escolhadoUsuario < 10) {
+	static boolean opcaoValida(int escolhadoUsuario, int[][] campoIni, String[][] campoAtt) {
+		boolean jaUsado = false;
+		
+		for(int i = 0; i < campoIni.length; i++) {
+			for(int j = 0; j < campoIni[0].length; j++) {
+				if(campoIni[i][j] == escolhadoUsuario && campoAtt[i][j].equals("")) {
+					jaUsado = false;
+				} else if(campoIni[i][j] == escolhadoUsuario && (campoAtt[i][j].equals("X") || campoAtt[i][j].equals("O"))) {
+					jaUsado = true;
+				}
+			}
+		}
+		
+		if(jaUsado == false) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	static void atualizarCampo(int escolha, int jogador, int[][] campoIni, String[][] campoAtt) {
+	static void atualizarCampo(int escolhadoUsuario, int jogador, int[][] campoIni, String[][] campoAtt) {
 		for (int i = 0; i < campoIni.length; i++) {
 			for (int j = 0; j < campoIni[0].length; j++) {
-				if (campoIni[i][j] == escolha && campoAtt[i][j] == "") {
+				if (campoIni[i][j] == escolhadoUsuario && campoAtt[i][j] == "") {
 					if (jogador == 1) {
 						campoAtt[i][j] = "X";
 					} else {
@@ -82,12 +94,12 @@ public class JogodaVelha {
 			System.out.println();
 		}
 		
-		String strJogada = "";
-		boolean verificarEntrada = false;
-		boolean escolhaValida = false;
-		int numJogada = 0;
 		int p1 = 1;
 		int p2 = 2;
+		String strJogada = "";
+		int numJogada = 0;
+		boolean verificarEntrada = false;
+		boolean escolhaValida = false;
 		boolean fimdeJogo = false;
 		int velha = 0;
 		
@@ -105,7 +117,7 @@ public class JogodaVelha {
 					}
 				}
 				
-				escolhaValida = opcaoValida(numJogada);
+				escolhaValida = opcaoValida(numJogada, campoInicial, campoAtualizado);
 				
 				if(escolhaValida == false) {
 					System.out.println("Escolha uma opção válida!");
@@ -133,7 +145,7 @@ public class JogodaVelha {
 						}
 					}
 					
-					escolhaValida = opcaoValida(numJogada);
+					escolhaValida = opcaoValida(numJogada, campoInicial, campoAtualizado);
 					
 					if(escolhaValida == false) {
 						System.out.println("Escolha uma opção válida!");
